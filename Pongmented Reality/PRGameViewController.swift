@@ -19,7 +19,7 @@ class PRGameViewController: UIViewController {
     
     let motionManager = CMMotionManager()
     let motionQueue = OperationQueue.current!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,7 +42,7 @@ class PRGameViewController: UIViewController {
         self.view = sceneView
         
         sceneView.showsStatistics = true
-        sceneView.allowsCameraControl = false
+        sceneView.allowsCameraControl = true
         sceneView.autoenablesDefaultLighting = false
     }
     
@@ -53,8 +53,9 @@ class PRGameViewController: UIViewController {
     
     func setupCamera() {
         cameraNode = SCNNode()
+        cameraNode.position = SCNVector3(x: 0, y: 0, z: 0)
         cameraNode.camera = SCNCamera()
-//        self.scene.rootNode.addChildNode(cameraNode)
+        self.scene.rootNode.addChildNode(cameraNode)
     }
     
     func spawnUserPaddle() -> UserPaddle {
@@ -62,14 +63,16 @@ class PRGameViewController: UIViewController {
         self.scene.rootNode.addChildNode(userPaddle)
         userPaddle.position = self.cameraNode.position
         userPaddle.addChildNode(self.cameraNode)
+        //cameraNode.position = SCNVector3(x: -1, y: 1, z: 5)
+        //cameraNode.orientation = SCNVector4(0, 0, 1, 0.25)
         return userPaddle
     }
-    
+
     func spawnBall() -> Ball {
         // STUB, but reminder of how this works
         let ball = Ball()
         self.scene.rootNode.addChildNode(ball)
-        ball.position = SCNVector3(x: 0, y: 0, z: -20)
+        ball.position = SCNVector3(x: 0, y: 0, z: -10)
         return ball
     }
 }
@@ -97,7 +100,7 @@ extension PRGameViewController {
 //        let phoneOrientation = deviceMotion.attitude.quaternion
 //        self.cameraNode.orientation = phoneOrientation
         let accel = deviceMotion.userAcceleration
-//        self.ball.updatePosition()
+        //self.ball.updatePosition()
         self.userPaddle.accelerate(accel: SCNVector3(x: Float(accel.x), y: Float(accel.y), z: 0))
         self.userPaddle.updatePosition()
     }
