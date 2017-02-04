@@ -78,7 +78,7 @@ extension PRGameViewController {
     func setupMotionManagement() {
         // STUB
         
-        self.motionManager.deviceMotionUpdateInterval = 0.005
+        self.motionManager.deviceMotionUpdateInterval = 0.01
         if self.motionManager.isDeviceMotionAvailable {
             self.motionManager.startDeviceMotionUpdates(to: self.motionQueue) { deviceMotion, error in
                 if error == nil, let deviceMotion = deviceMotion {
