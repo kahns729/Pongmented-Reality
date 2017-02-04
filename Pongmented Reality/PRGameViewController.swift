@@ -100,7 +100,7 @@ extension PRGameViewController {
 //        let phoneOrientation = deviceMotion.attitude.quaternion
 //        self.cameraNode.orientation = phoneOrientation
         let accel = deviceMotion.userAcceleration
-        //self.ball.updatePosition()
+//        self.ball.updatePosition()
         self.userPaddle.accelerate(accel: SCNVector3(x: Float(accel.x), y: Float(accel.y), z: 0))
         self.userPaddle.updatePosition()
     }

@@ -9,16 +9,17 @@
 import UIKit
 import SceneKit
 
-let ACCEL_TRUNC_THRESHOLD = SCNVector3(x: 0.0001, y: 0.0001, z: 0.0001)
+let ACCEL_TRUNC_THRESHOLD = SCNVector3(x: 0.001, y: 0.001, z: 0.001)
+let ACCEL_STOP_THRESHOLD = SCNVector3(x: 0.02, y: 0.02, z: 0.02)
 //let ACCEL_TRUNC_THRESHOLD = SCNVector3(x: 0.0, y: 0.0, z: 0.0)
 let ACCEL_DAMPEN_FACTOR : Float = 0.02
 
 //let VELOC_TRUNC_THRESHOLD = SCNVector3(x: 0.0002, y: 0.0002, z: 0.0002)
-let VELOC_TRUNC_THRESHOLD = SCNVector3(x: 0.02, y: 0.02, z: 0.02)
+let VELOC_TRUNC_THRESHOLD = SCNVector3(x: 0.0, y: 0.0, z: 0.0)
 let VELOC_DAMPEN_FACTOR : Float = 1
 
 let ORIGIN = SCNVector3(x: 0, y: 0, z: -1)
-let ACCEL_HISTORY_LEN = 5
+let ACCEL_HISTORY_LEN = 3
 
 fileprivate struct Bounds {
     typealias Bound = (lower: Float, upper: Float)
@@ -41,17 +42,19 @@ class UserPaddle: SCNNode {
     }
     
     func accelerate(accel : SCNVector3) {
-        var trueAccel = accel.trunc(threshold: ACCEL_TRUNC_THRESHOLD, dampen: ACCEL_DAMPEN_FACTOR)
-        if trueAccel.x == 0.0 && trueAccel.y == 0.0 && trueAccel.z == 0.0 {
+        let stopAccel = accel.trunc(threshold: ACCEL_STOP_THRESHOLD)
+        if stopAccel.x == 0.0 && stopAccel.y == 0.0 && stopAccel.z == 0.0 {
             consecutiveZeroes += 1
             if consecutiveZeroes >= ACCEL_HISTORY_LEN {
                 self.velocity = SCNVector3(0, 0, 0)
             }
         } else {
             consecutiveZeroes = 0
-            trueAccel.x = -1.0 * trueAccel.x
-            self.velocity = (self.velocity + trueAccel).trunc(threshold: VELOC_TRUNC_THRESHOLD)
         }
+        var trueAccel = accel.trunc(threshold: ACCEL_TRUNC_THRESHOLD, dampen: ACCEL_DAMPEN_FACTOR)
+        trueAccel.x = -1.0 * trueAccel.x
+        trueAccel.y = -1.0 * trueAccel.y
+        self.velocity = (self.velocity + trueAccel).trunc(threshold: VELOC_TRUNC_THRESHOLD)
 //        trueAccel.x = -1.0 * trueAccel.x
 //        self.velocity = (self.velocity + trueAccel).trunc(threshold: VELOC_TRUNC_THRESHOLD)
 //        print("Velocity: \(self.velocity)\nAcceleration: \(accel)\n")
