@@ -9,8 +9,12 @@
 import UIKit
 import SceneKit
 
-let TRUNC_THRESHOLD = SCNVector3(x: 0.1, y: 0.1, z: 0.1)
-let DAMPEN_FACTOR = 0.005
+let ACCEL_TRUNC_THRESHOLD = SCNVector3(x: 0.0001, y: 0.0001, z: 0.0001)
+let ACCEL_TRUNC_THRESHOLD = SCNVector3(x: 0.0, y: 0.0, z: 0.0)
+let ACCEL_DAMPEN_FACTOR : Float = 0.02
+
+let VELOC_TRUNC_THRESHOLD = SCNVector3(x: 0.005, y: 0.005, z: 0.005)
+let VELOC_DAMPEN_FACTOR : Float = 1
 
 class UserPaddle: SCNNode {
     var velocity : SCNVector3 = SCNVector3(x: 0, y: 0, z: 0)
@@ -25,12 +29,9 @@ class UserPaddle: SCNNode {
     }
     
     func accelerate(accel : SCNVector3) {
-        let trueAccel = accel.trunc(threshold: TRUNC_THRESHOLD, dampen: DAMPEN_FACTOR)
-//        if trueAccel.x == 0 && trueAccel.y == 0 && trueAccel.z == 0 {
-//            self.velocity = SCNVector3(x: 0, y: 0, z: 0)
-//        } else {
-            self.velocity = self.velocity + trueAccel
-//        }
+        var trueAccel = accel.trunc(threshold: ACCEL_TRUNC_THRESHOLD, dampen: ACCEL_DAMPEN_FACTOR)
+        trueAccel.x = -1.0 * trueAccel.x
+        self.velocity = (self.velocity + trueAccel).trunc(threshold: VELOC_TRUNC_THRESHOLD)
     }
     
     func updatePosition() {

@@ -14,16 +14,16 @@ public func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
 }
 
 extension SCNVector3 {
-    func trunc(threshold: SCNVector3, dampen: Double?) -> SCNVector3 {
+    func trunc(threshold: SCNVector3, dampen: Float = 1.0) -> SCNVector3 {
         var truncVector3 = SCNVector3(0, 0, 0)
-        if self.x >= threshold.x {
-            truncVector3.x = self.x
+        if abs(self.x) >= threshold.x {
+            truncVector3.x = dampen * self.x
         }
-        if self.y >= threshold.y {
-            truncVector3.y = self.y
+        if abs(self.y) >= threshold.y {
+            truncVector3.y = dampen * self.y
         }
-        if self.z >= threshold.z {
-            truncVector3.z = self.z
+        if abs(self.z) >= threshold.z {
+            truncVector3.z = dampen * self.z
         }
         return truncVector3
     }

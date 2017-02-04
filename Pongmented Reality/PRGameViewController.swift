@@ -69,7 +69,7 @@ class PRGameViewController: UIViewController {
         // STUB, but reminder of how this works
         let ball = Ball()
         self.scene.rootNode.addChildNode(ball)
-        ball.position = SCNVector3(x: 0, y: 0, z: -10)
+        ball.position = SCNVector3(x: 0, y: 0, z: -20)
         return ball
     }
 }
@@ -78,7 +78,7 @@ extension PRGameViewController {
     func setupMotionManagement() {
         // STUB
         
-        self.motionManager.deviceMotionUpdateInterval = 0.02
+        self.motionManager.deviceMotionUpdateInterval = 0.005
         if self.motionManager.isDeviceMotionAvailable {
             self.motionManager.startDeviceMotionUpdates(to: self.motionQueue) { deviceMotion, error in
                 if error == nil, let deviceMotion = deviceMotion {
