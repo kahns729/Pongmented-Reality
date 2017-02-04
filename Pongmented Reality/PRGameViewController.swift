@@ -15,6 +15,7 @@ class PRGameViewController: UIViewController {
     var scene: SCNScene!
     var cameraNode: SCNNode!
     var ball: Ball!
+    var userPaddle: UserPaddle!
     
     let motionManager = CMMotionManager()
     let motionQueue = OperationQueue.current!
@@ -32,6 +33,7 @@ class PRGameViewController: UIViewController {
         
         // Scene setup
         self.ball = spawnBall()
+        self.userPaddle = spawnUserPaddle()
     }
 
     func setupView() {
@@ -52,7 +54,15 @@ class PRGameViewController: UIViewController {
     func setupCamera() {
         cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
-        self.scene.rootNode.addChildNode(cameraNode)
+//        self.scene.rootNode.addChildNode(cameraNode)
+    }
+    
+    func spawnUserPaddle() -> UserPaddle {
+        let userPaddle = UserPaddle()
+        self.scene.rootNode.addChildNode(userPaddle)
+        userPaddle.position = self.cameraNode.position
+        userPaddle.addChildNode(self.cameraNode)
+        return userPaddle
     }
     
     func spawnBall() -> Ball {
@@ -86,7 +96,9 @@ extension PRGameViewController {
     func handleDeviceMotionUpdate(deviceMotion: CMDeviceMotion) {
 //        let phoneOrientation = deviceMotion.attitude.quaternion
 //        self.cameraNode.orientation = phoneOrientation
-        self.ball.updatePosition()
-        
+        let accel = deviceMotion.userAcceleration
+//        self.ball.updatePosition()
+        self.userPaddle.accelerate(accel: SCNVector3(x: Float(accel.x), y: Float(accel.y), z: 0))
+        self.userPaddle.updatePosition()
     }
 }

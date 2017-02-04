@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5D2DB3781E46656400CE28B1 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2DB3771E46656400CE28B1 /* Ball.swift */; };
 		5D2DB37A1E46678500CE28B1 /* PRVector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2DB3791E46678500CE28B1 /* PRVector3.swift */; };
+		5D2DB37C1E4671C400CE28B1 /* UserPaddle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2DB37B1E4671C400CE28B1 /* UserPaddle.swift */; };
 		7FD977721E465F850084F168 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FD977711E465F850084F168 /* AppDelegate.swift */; };
 		7FD977791E465F850084F168 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7FD977781E465F850084F168 /* Assets.xcassets */; };
 		7FD9777C1E465F850084F168 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FD9777A1E465F850084F168 /* LaunchScreen.storyboard */; };
@@ -29,6 +30,7 @@
 /* Begin PBXFileReference section */
 		5D2DB3771E46656400CE28B1 /* Ball.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
 		5D2DB3791E46678500CE28B1 /* PRVector3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRVector3.swift; sourceTree = "<group>"; };
+		5D2DB37B1E4671C400CE28B1 /* UserPaddle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPaddle.swift; sourceTree = "<group>"; };
 		7FD9776E1E465F850084F168 /* Pongmented Reality.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pongmented Reality.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FD977711E465F850084F168 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7FD977781E465F850084F168 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				7FD977911E465FCC0084F168 /* PRGameViewController.swift */,
 				5D2DB3771E46656400CE28B1 /* Ball.swift */,
 				5D2DB3791E46678500CE28B1 /* PRVector3.swift */,
+				5D2DB37B1E4671C400CE28B1 /* UserPaddle.swift */,
 			);
 			path = "Pongmented Reality";
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				5D2DB3781E46656400CE28B1 /* Ball.swift in Sources */,
 				7FD977921E465FCC0084F168 /* PRGameViewController.swift in Sources */,
 				5D2DB37A1E46678500CE28B1 /* PRVector3.swift in Sources */,
+				5D2DB37C1E4671C400CE28B1 /* UserPaddle.swift in Sources */,
 				7FD977721E465F850084F168 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
