@@ -14,6 +14,10 @@ class PRGameViewController: UIViewController {
     var sceneView: SCNView!
     var scene: SCNScene!
     var cameraNode: SCNNode!
+    var ball: Ball!
+    
+    let motionManager = CMMotionManager()
+    let motionQueue = OperationQueue.current!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +31,7 @@ class PRGameViewController: UIViewController {
         setupMotionManagement()
         
         // Scene setup
-        spawnSomething()
+        self.ball = spawnBall()
     }
 
     func setupView() {
@@ -51,20 +55,20 @@ class PRGameViewController: UIViewController {
         self.scene.rootNode.addChildNode(cameraNode)
     }
     
-    func spawnSomething() {
+    func spawnBall() -> Ball {
         // STUB, but reminder of how this works
-        let circle = SCNSphere(radius: 0.5)
-        let circleNode = SCNNode(geometry: circle)
-        self.scene.rootNode.addChildNode(circleNode)
-        circleNode.position = SCNVector3(x: 11, y: 0, z: 0)
+        let ball = Ball()
+        self.scene.rootNode.addChildNode(ball)
+        ball.position = SCNVector3(x: 0, y: 0, z: -10)
+        return ball
     }
 }
 
 extension PRGameViewController {
     func setupMotionManagement() {
         // STUB
-        /*
-        self.motionManager.deviceMotionUpdateInterval = 0.1
+        
+        self.motionManager.deviceMotionUpdateInterval = 0.02
         if self.motionManager.isDeviceMotionAvailable {
             self.motionManager.startDeviceMotionUpdates(to: self.motionQueue) { deviceMotion, error in
                 if error == nil, let deviceMotion = deviceMotion {
@@ -76,11 +80,13 @@ extension PRGameViewController {
             }
         } else {
             print("device not available")
-        }*/
+        }
     }
     
     func handleDeviceMotionUpdate(deviceMotion: CMDeviceMotion) {
-        let phoneOrientation = deviceMotion.attitude.quaternion
-        // self.cameraNode.orientation = phoneOrientation
+//        let phoneOrientation = deviceMotion.attitude.quaternion
+//        self.cameraNode.orientation = phoneOrientation
+        self.ball.updatePosition()
+        
     }
 }
