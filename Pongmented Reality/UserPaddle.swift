@@ -19,7 +19,9 @@ let VELOC_TRUNC_THRESHOLD = SCNVector3(x: 0.0, y: 0.0, z: 0.0)
 let VELOC_DAMPEN_FACTOR : Float = 1
 
 let ORIGIN = SCNVector3(x: 0, y: 0, z: 0)
+let ORIGIN_EPSILON : Float = 0.01
 let ACCEL_HISTORY_LEN = 8
+let STILLS_FOR_STOP = 10
 //let ACCEL_HISTORY_STOP = 3
 //let ACCEL_HISTORY_SNAP = 5
 
@@ -38,6 +40,8 @@ func weightedAverage(_ accelQueue : Queue<SCNVector3>) -> SCNVector3 {
     return result.scale(1.0 / divisor)
 }
 
+
+
 fileprivate struct Bounds {
     typealias Bound = (lower: Float, upper: Float)
     let x: Bound = (-3, 3)
@@ -47,6 +51,7 @@ fileprivate struct Bounds {
 class UserPaddle: SCNNode {
     var velocity : SCNVector3 = SCNVector3(x: 0, y: 0, z: 0)
     var accelHistory = Queue<SCNVector3>()
+    var numStill = 0
     private let bounds = Bounds()
     
     override init() {
@@ -59,6 +64,7 @@ class UserPaddle: SCNNode {
     }
     
     func accelerate(accel : SCNVector3) {
+        
         var trueAccel = accel
         trueAccel.x = -1.0 * accel.x
         trueAccel.z = 0
@@ -67,6 +73,18 @@ class UserPaddle: SCNNode {
             accelHistory.pop()
         }
         self.velocity = self.velocity + weightedAverage(accelHistory).scale(ACCEL_DAMPEN_FACTOR)
+        if (accel.underThreshold(threshold: ACCEL_STOP_THRESHOLD)) {
+            numStill += 1
+        } else {
+            numStill = 0
+        }
+        if (accel.distance(other: ORIGIN) < ORIGIN_EPSILON) {
+            numStill = 0
+        } else if numStill == STILLS_FOR_STOP {
+            self.snapToOrigin()
+            numStill = 0
+        }
+        print(numStill)
     }
     
     func updatePosition() {
@@ -89,5 +107,9 @@ class UserPaddle: SCNNode {
             self.position.y = bounds.y.upper
             self.velocity.y = 0
         }
+    }
+    
+    func snapToOrigin() {
+        self.position = ORIGIN
     }
 }

@@ -32,7 +32,16 @@ extension SCNVector3 {
         return truncVector3
     }
     
+    func underThreshold(threshold : SCNVector3) -> Bool {
+        let check = self.trunc(threshold: threshold)
+        return check.x == 0 && check.y == 0 && check.z == 0
+    }
+    
     func scale(_ factor: Float) -> SCNVector3 {
         return SCNVector3(self.x * factor, self.y * factor, self.z * factor)
+    }
+    
+    func distance(other : SCNVector3) -> Float {
+        return sqrt(pow(self.x - other.x, 2.0) + pow(self.y - other.y, 2.0) + pow(self.z - other.z, 2.0))
     }
 }
