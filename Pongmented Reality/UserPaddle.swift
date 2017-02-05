@@ -18,8 +18,25 @@ let ACCEL_DAMPEN_FACTOR : Float = 0.02
 let VELOC_TRUNC_THRESHOLD = SCNVector3(x: 0.0, y: 0.0, z: 0.0)
 let VELOC_DAMPEN_FACTOR : Float = 1
 
-let ORIGIN = SCNVector3(x: 0, y: 0, z: -1)
-let ACCEL_HISTORY_LEN = 3
+let ORIGIN = SCNVector3(x: 0, y: 0, z: 0)
+let ACCEL_HISTORY_LEN = 8
+//let ACCEL_HISTORY_STOP = 3
+//let ACCEL_HISTORY_SNAP = 5
+
+func weightedAverage(_ accelQueue : Queue<SCNVector3>) -> SCNVector3 {
+    var index = 1
+    var divisor : Float = 0.0
+    var result = SCNVector3(0, 0, 0)
+    var iterator = accelQueue.head
+    while iterator != nil {
+        let weight = pow(Float(index), 3.0)
+        result = result + iterator!.data.scale(weight)
+        divisor += weight
+        iterator = iterator!.next
+        index += 1
+    }
+    return result.scale(1.0 / divisor)
+}
 
 fileprivate struct Bounds {
     typealias Bound = (lower: Float, upper: Float)
@@ -29,7 +46,7 @@ fileprivate struct Bounds {
 
 class UserPaddle: SCNNode {
     var velocity : SCNVector3 = SCNVector3(x: 0, y: 0, z: 0)
-    var consecutiveZeroes : Int = 0
+    var accelHistory = Queue<SCNVector3>()
     private let bounds = Bounds()
     
     override init() {
@@ -42,24 +59,14 @@ class UserPaddle: SCNNode {
     }
     
     func accelerate(accel : SCNVector3) {
-        let stopAccel = accel.trunc(threshold: ACCEL_STOP_THRESHOLD)
-        if stopAccel.x == 0.0 && stopAccel.y == 0.0 && stopAccel.z == 0.0 {
-            consecutiveZeroes += 1
-            if consecutiveZeroes >= ACCEL_HISTORY_LEN {
-                self.velocity = SCNVector3(0, 0, 0)
-            }
-        } else {
-            consecutiveZeroes = 0
+        var trueAccel = accel
+        trueAccel.x = -1.0 * accel.x
+        trueAccel.z = 0
+        accelHistory.push(accel)
+        if accelHistory.len > ACCEL_HISTORY_LEN {
+            accelHistory.pop()
         }
-        var trueAccel = accel.trunc(threshold: ACCEL_TRUNC_THRESHOLD, dampen: ACCEL_DAMPEN_FACTOR)
-        trueAccel.x = -1.0 * trueAccel.x
-        trueAccel.y = -1.0 * trueAccel.y
-        self.velocity = (self.velocity + trueAccel).trunc(threshold: VELOC_TRUNC_THRESHOLD)
-//        trueAccel.x = -1.0 * trueAccel.x
-//        self.velocity = (self.velocity + trueAccel).trunc(threshold: VELOC_TRUNC_THRESHOLD)
-//        print("Velocity: \(self.velocity)\nAcceleration: \(accel)\n")
-//        self.velocity = trueAccel
-//        accelHistory.push(trueAccel)
+        self.velocity = self.velocity + weightedAverage(accelHistory).scale(ACCEL_DAMPEN_FACTOR)
     }
     
     func updatePosition() {
@@ -82,9 +89,5 @@ class UserPaddle: SCNNode {
             self.position.y = bounds.y.upper
             self.velocity.y = 0
         }
-    }
-    
-    func snapToOrigin() {
-        self.position = ORIGIN
     }
 }

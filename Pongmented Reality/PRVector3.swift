@@ -13,8 +13,12 @@ public func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
     return SCNVector3(left.x + right.x, left.y + right.y, left.z + right.z)
 }
 
+public func - (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(left.x - right.x, left.y - right.y, left.z - right.z)
+}
+
 extension SCNVector3 {
-    func trunc(threshold: SCNVector3, dampen: Float = 1.0) -> SCNVector3 {
+    func trunc(threshold: SCNVector3 = SCNVector3(0, 0, 0), dampen: Float = 1.0) -> SCNVector3 {
         var truncVector3 = SCNVector3(0, 0, 0)
         if abs(self.x) >= threshold.x {
             truncVector3.x = dampen * self.x
@@ -26,5 +30,9 @@ extension SCNVector3 {
             truncVector3.z = dampen * self.z
         }
         return truncVector3
+    }
+    
+    func scale(_ factor: Float) -> SCNVector3 {
+        return SCNVector3(self.x * factor, self.y * factor, self.z * factor)
     }
 }
