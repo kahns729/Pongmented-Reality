@@ -49,6 +49,9 @@ class Queue<T> {
             return nil
         }
     }
+    func clear() {
+        while let _ = pop() {}
+    }
     func printQueue() {
         var iterator = self.head
         var str = ""

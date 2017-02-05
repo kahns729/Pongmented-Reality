@@ -42,7 +42,7 @@ class PRGameViewController: UIViewController {
         self.view = sceneView
         
         sceneView.showsStatistics = true
-        sceneView.allowsCameraControl = true
+        sceneView.allowsCameraControl = false
         sceneView.autoenablesDefaultLighting = true
     }
     

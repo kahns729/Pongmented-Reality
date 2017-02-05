@@ -75,19 +75,23 @@ class UserPaddle: SCNNode {
         if self.position.x < bounds.x.lower {
             self.position.x = bounds.x.lower
             self.velocity.x = 0
+            accelHistory.clear()
         }
         if self.position.y < bounds.y.lower {
             self.position.y = bounds.y.lower
             self.velocity.y = 0
+            accelHistory.clear()
         }
         
         if self.position.x > bounds.x.upper {
             self.position.x = bounds.x.upper
             self.velocity.x = 0
+            accelHistory.clear()
         }
         if self.position.y > bounds.y.upper {
             self.position.y = bounds.y.upper
             self.velocity.y = 0
+            accelHistory.clear()
         }
     }
 }
